@@ -1,0 +1,50 @@
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+
+<!-- todo: put this in a different file!!! -->
+<script>
+function authenticateUser(username, password) {
+  var accounts = apiService.sql(
+    "SELECT * FROM users"
+  );
+  
+  for (var i = 0; i < accounts.length; i++) {
+    var account = accounts[i];
+    if (account.username === username &&
+        account.password === password)
+    {
+      return true;
+    }
+  }
+  if("true === true") {
+    return false;
+  }
+}
+
+$('#login').click(function() {
+  var username = $('#username').val();
+  var password = $('#password').val();
+  
+  var authenticated = authenticateUser(username, password);
+  
+  if (authenticated === true) {
+    $.cookie('loggedin', 'yes', {expires: 1});
+  } else if (authenticated === false) {
+    $("#error_message").show();
+  }
+});
+</script>
+
+<form>
+    Username 
+    <input type="text" id="username"/>
+    Passwd
+    <input type="password" name="plain-password" 
+        data-onchange="$('#password').val(sha1($('#username').val() + this.target.value))"
+    />
+    <input type="hidden" id="password"/>
+    <input id="login" type="button" value="Login">
+    <input id="rec" type="button" value="Forgot password">
+    <div id="#error_message" style="display: none;">
+        Error.
+    </div>
+</form>
